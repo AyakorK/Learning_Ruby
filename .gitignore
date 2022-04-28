@@ -1,2 +1,4 @@
-.idea
+*.idea
+.idea/RubyScript.iml
 .pre-commit-config.yaml
+.byebug_history

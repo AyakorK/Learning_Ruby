@@ -1,34 +1,62 @@
 require 'fileutils'
 
 class Folder
+
+  def self.check_folder(folder)
+
+    return false if !File.directory?(folder)
+
+    folders = Dir.entries(folder)
+
+    if check_important(folders).inspect == 'true'
+      return true
+    end
+
+    folders.each do |f|
+      next if f.include?(".")
+      if File.directory?("#{folder}/#{f}")
+        subfolder= folder + "/" + f
+        puts "Found subfolder: " + subfolder
+        return true if check_folder(subfolder).inspect == 'true'
+      end
+    end
+  end
+
+  def self.check_important(folders)
+    #puts "Checking important files in folder: " + folders.to_s
+    if folders.include?".important"
+      puts "Found .important file"
+      return true
+    end
+  end
+
+  def self.ask_answer(question)
+    puts question
+    return gets.chomp
+  end
+
+
   def self.delete_folder(folder = null)
 
-    # Check if folder exists
+    if !File.directory?(folder)
+      puts "Folder does not exist"
+      return
+    end
 
-    if File.directory?(folder)
-      # Search for the actual folder
-      folders = Dir.entries(folder)
-      # if folder contains file .important ask for a confirmation before deleting it
-      # Verify if this folder exists
-      answer = ""
-      if folders.include? '.important'
-        while answer != 'y' && answer != 'n' && answer != 'Y' && answer != 'N' do
-          puts 'This folder contains a .important file, do you want to delete it? (y/n)'
-          answer = gets.chomp
-          if answer == 'y' || answer == 'Y'
-            puts 'Deleting folder'
-            FileUtils.rm_rf(folder)
-          else if answer == 'n' || answer == 'N'
-            puts 'Aborting'
-          end
-          end
+    if check_folder(folder).inspect == "true"
+      question = "This folder #{folder} contains a .important file, do you want to delete it? (y/n)"
+      answer = ask_answer(question)
+      while answer != 'y' && answer != 'n' && answer != 'Y' && answer != 'N' do
+        answer = ask_answer("Wrong answer pick between y/n \n#{question}")
+        if answer == 'y' || answer == 'Y'
+          puts "Deleting folder #{folder}"
+          FileUtils.rm_rf(folder)
         end
-      else
-        puts 'Deleting folder'
-        FileUtils.rm_rf(folder)
+        puts "Aborting" if answer == 'n' || answer == 'N'
       end
     else
-      puts 'Folder does not exist'
+      puts "Deleting folder #{folder}"
+      FileUtils.rm_rf(folder)
     end
   end
 end

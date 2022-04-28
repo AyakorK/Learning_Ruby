@@ -6,10 +6,11 @@
 # ------------------------------------------------------------------------------
 
 # require class folder.rb
+require 'byebug'
 require_relative 'folder.rb'
 
 
-Folder.delete_folder("fjiozeoi")
+Folder.delete_folder("../file_test2")
 
 
 
