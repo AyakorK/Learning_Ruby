@@ -25,7 +25,10 @@ class Folder
 
   def self.check_important(folders)
     #puts "Checking important files in folder: " + folders.to_s
-    if folders.include?".important"
+    return false unless folders.include?(".important")
+    
+    puts "Found '.important' file"
+    true
       puts "Found .important file"
       return true
     end
