@@ -15,7 +15,8 @@ class Folder
     folders.each do |f|
       next if f.include?(".")
       if File.directory?("#{folder}/#{f}")
-        subfolder= folder + "/" + f
+        subfolder= "#{folder}/#{f}"
+        puts "Found subfolder: #{subfolder}"
         puts "Found subfolder: " + subfolder
         return true if check_folder(subfolder).inspect == 'true'
       end
