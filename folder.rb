@@ -23,7 +23,6 @@ class Folder
   end
 
   def self.check_important(folders, file_to_del)
-    # puts "Checking important files in folder: " + folders.to_s
     return false unless folders.include?(file_to_del.to_s)
 
     puts "Found #{file_to_del} file"
