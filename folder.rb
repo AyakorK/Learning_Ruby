@@ -18,7 +18,7 @@ class Folder
         subfolder= "#{folder}/#{f}"
         puts "Found subfolder: #{subfolder}"
         puts "Found subfolder: " + subfolder
-        return true if check_folder(subfolder).inspect == 'true'
+        return true if check_folder(subfolder)
       end
     end
   end
