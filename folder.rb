@@ -8,7 +8,7 @@ class Folder
 
     folders = Dir.entries(folder)
 
-    if check_important(folders).inspect == 'true'
+    return true if check_important(folders)
       return true
     end
 
