@@ -1,65 +1,64 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 
+# All methods for our folder
 class Folder
-  $file_to_del = ".important"
-
-  def self.check_folder(folder)
-
-    return false if !File.directory?(folder)
+  def self.check_folder(folder, file_to_del)
+    return false unless File.directory?(folder)
 
     folders = Dir.entries(folder)
-    return true if check_important(folders)
+    return true if check_important(folders, file_to_del)
 
     folders.each do |f|
-      next if f.include?(".")
-      if File.directory?("#{folder}/#{f}")
-        subfolder= "#{folder}/#{f}"
-        puts "Found subfolder: #{subfolder}"
-        puts check_folder(subfolder)
-        return true if check_folder(subfolder)
-      end
+      next if f.include?('.')
+
+      next unless File.directory?("#{folder}/#{f}")
+
+      subfolder = "#{folder}/#{f}"
+      puts "Found subfolder: #{subfolder}"
+      return true if check_folder(subfolder)
     end
-    return false
+    false
   end
 
-  def self.check_important(folders)
-    #puts "Checking important files in folder: " + folders.to_s
-    return false unless folders.include?("#{$file_to_del}")
-      puts "Found #{$file_to_del} file"
-      return true
-    end
+  def self.check_important(folders, file_to_del)
+    # puts "Checking important files in folder: " + folders.to_s
+    return false unless folders.include?(file_to_del.to_s)
+
+    puts "Found #{file_to_del} file"
+    true
+  end
 
   def self.ask_answer(question)
     puts question
-    return gets.chomp
+    gets.chomp
   end
 
   def self.delete_folder(folder = null)
-    responses = ["y", "n", "Y", "N"]
+    responses = %w[y n Y N]
 
-    if !File.directory?(folder)
-      puts "Folder does not exist"
+    unless File.directory?(folder)
+      puts 'Folder does not exist'
       return
     end
 
-    if check_folder(folder)
-      question = "This folder #{folder} contains a #{$file_to_del} file, do you want to delete it? (y/n)"
+    if check_folder(folder, file_to_del)
+      file_to_del = '.important'
+      question = "This folder #{folder} contains a #{file_to_del} file, do you want to delete it? (y/n)"
       answer = ask_answer(question)
 
-      while !responses.include?(answer) do
-        hasAnswered = true
-        answer = ask_answer("Wrong answer pick between y/n \n#{question}")
-      end
-      
-      if answer == 'y' || answer == 'Y'
+      answer = ask_answer("Wrong answer pick between y/n \n#{question}") until responses.include?(answer)
+
+      if %w[y Y].include?(answer)
         puts "Deleting folder #{folder}"
-        #FileUtils.rm_rf(folder)
+        FileUtils.rm_rf(folder)
       end
-      puts "Aborting" if answer == 'n' || answer == 'N'
-      
+      puts 'Aborting' if %w[n N].include?(answer)
+
     else
       puts "Deleting folder #{folder}"
-      #FileUtils.rm_rf(folder)
+      FileUtils.rm_rf(folder)
     end
   end
 end
