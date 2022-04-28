@@ -10,7 +10,7 @@ require 'byebug'
 require_relative 'folder.rb'
 
 
-Folder.delete_folder("../file_test2")
+Folder.delete_folder(ARGV[1])
 
 
 
