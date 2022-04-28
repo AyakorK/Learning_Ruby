@@ -15,7 +15,6 @@ class Folder
       if File.directory?("#{folder}/#{f}")
         subfolder= "#{folder}/#{f}"
         puts "Found subfolder: #{subfolder}"
-        puts check_folder(subfolder)
         return true if check_folder(subfolder)
       end
     end
