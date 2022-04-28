@@ -22,7 +22,6 @@ class Folder
   end
 
   def self.check_important(folders)
-    #puts "Checking important files in folder: " + folders.to_s
     return false unless folders.include?("#{$file_to_del}")
       puts "Found #{$file_to_del} file"
       return true
@@ -52,13 +51,13 @@ class Folder
       
       if answer == 'y' || answer == 'Y'
         puts "Deleting folder #{folder}"
-        #FileUtils.rm_rf(folder)
+        FileUtils.rm_rf(folder)
       end
       puts "Aborting" if answer == 'n' || answer == 'N'
       
     else
       puts "Deleting folder #{folder}"
-      #FileUtils.rm_rf(folder)
+      FileUtils.rm_rf(folder)
     end
   end
 end
