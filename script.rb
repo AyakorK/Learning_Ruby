@@ -7,7 +7,6 @@
 # Author: Guillaume MORET
 # ------------------------------------------------------------------------------
 
-# require class folder.rb
 require 'byebug'
 require_relative 'folder'
 
