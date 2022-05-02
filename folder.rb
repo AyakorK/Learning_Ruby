@@ -4,49 +4,49 @@ require 'fileutils'
 
 # All methods for our folder
 class Folder
-  def self.check_folder(folder, file_to_del)
-    return false unless File.directory?(folder)
+  def self.check_folder?(folder, file_to_del)
+    return unless File.directory?(folder)
 
     folders = Dir.entries(folder)
-    return true if check_important(folders, file_to_del)
+    if check_important?(folders, file_to_del)
+      puts 'You have important files in this folder'
+      return true
+    end
 
     folders.each do |f|
       next if f.include?('.')
-
       next unless File.directory?("#{folder}/#{f}")
 
       subfolder = "#{folder}/#{f}"
-      puts "Found subfolder: #{subfolder}"
-      return true if check_folder(subfolder)
+      return if check_folder?(subfolder, file_to_del)
     end
     false
   end
 
-  def self.check_important(folders, file_to_del)
-    return false unless folders.include?(file_to_del.to_s)
+  def self.check_important?(folders, file_to_del)
+    return unless folders.include?(file_to_del.to_s)
 
-    puts "Found #{file_to_del} file"
     true
   end
 
   def self.ask_answer(question)
     puts question
-    gets.chomp
+    $stdin.gets.chomp
   end
 
   def self.delete_folder(folder = null)
     responses = %w[y n Y N]
+    file_to_del = '.important'
 
     unless File.directory?(folder)
       puts 'Folder does not exist'
       return
     end
 
-    if check_folder(folder, file_to_del)
-      file_to_del = '.important'
+    if check_folder?(folder, file_to_del) != false
+
       question = "This folder #{folder} contains a #{file_to_del} file, do you want to delete it? (y/n)"
       answer = ask_answer(question)
-
       answer = ask_answer("Wrong answer pick between y/n \n#{question}") until responses.include?(answer)
 
       if %w[y Y].include?(answer)

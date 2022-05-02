@@ -10,4 +10,4 @@
 require 'byebug'
 require_relative 'folder'
 
-Folder.delete_folder(ARGV[1])
+Folder.delete_folder(ARGV[0])
